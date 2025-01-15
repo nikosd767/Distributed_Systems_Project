@@ -1,0 +1,92 @@
+<!-- Registration page template that extends the base layout -->
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+<head>
+    <title>Register</title>
+</head>
+<body>
+<!-- Main content section -->
+<div layout:fragment="main-content">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <!-- Registration card -->
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">User Registration</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Registration form -->
+                    <form th:action="@{/saveUser}" method="post" th:object="${user}">
+                        <!-- Error message displays -->
+                        <div th:if="${error}" class="alert alert-danger">
+                            <span th:text="${error}"></span>
+                        </div>
+                        <div th:if="${param.error}" class="alert alert-danger">
+                            <p th:text="${param.error}"></p>
+                        </div>
+                        <!-- Username field -->
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" th:field="*{username}" id="username" required>
+                            <div class="form-text text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+                        </div>
+                        <!-- Email field -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" th:field="*{email}" id="email" required>
+                            <div class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                        </div>
+                        <!-- Password field -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" th:field="*{password}" id="password" required>
+                        </div>
+                        <!-- Role selection -->
+                        <div class="mb-3">
+                            <label class="form-label">Role</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="role" id="roleTenant" value="TENANT" checked>
+                                <label class="form-check-label" for="roleTenant">
+                                    Tenant
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="role" id="roleOwner" value="OWNER">
+                                <label class="form-check-label" for="roleOwner">
+                                    Owner
+                                </label>
+                            </div>
+                        </div>
+                        <!-- Additional user information fields -->
+                        <div class="additional-fields">
+                            <div class="mb-3">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" class="form-control" name="firstName" id="firstName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" name="lastName" id="lastName" required>
+                            </div>
+                        </div>
+                        <!-- Contact information -->
+                        <div class="mb-3">
+                            <label for="phoneNumber" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" name="phoneNumber" id="phoneNumber" required>
+                        </div>
+                        <!-- Submit button -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Sign Up</button>
+                        </div>
+                    </form>
+                    <!-- Success/Info message display -->
+                    <div th:if="${msg}" class="alert alert-info mt-3" th:text="${msg}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

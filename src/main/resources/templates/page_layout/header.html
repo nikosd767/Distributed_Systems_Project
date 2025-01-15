@@ -1,0 +1,91 @@
+<!-- Header with navigation and user authentication -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Estate Management</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles -->
+    <style>
+        body {
+            padding-top: 70px;
+        }
+    </style>
+</head>
+<body>
+<!-- Header fragment with navigation -->
+<header th:fragment="header">
+    <!-- Fixed top navigation bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container">
+            <!-- Brand logo/name -->
+            <a class="navbar-brand" href="/">Real Estate Management</a>
+            <!-- Mobile menu toggle button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Navigation menu -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <!-- Home link (visible to all) -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/" data-path="/">Home</a>
+                    </li>
+                    <!-- Admin menu items -->
+                    <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a class="nav-link" href="/tenants" data-path="/tenants">Tenants</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a class="nav-link" href="/owner" data-path="/owner">Owners</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a class="nav-link" href="/estate" data-path="/estate">Estates</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a class="nav-link" href="/pending-users" data-path="/pending-users">Users</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a class="nav-link" href="/reports/list" data-path="/reports/list">Reports</a>
+                    </li>
+                    <!-- Tenant menu items -->
+                    <li class="nav-item" sec:authorize="hasRole('ROLE_TENANT')">
+                        <a class="nav-link" href="/reports/create" data-path="/reports/create">Report an Estate</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAnyRole('ROLE_TENANT')">
+                        <a class="nav-link" href="/reports/my-reports" data-path="/reports/my-reports">My Reports</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAnyRole('ROLE_TENANT')">
+                        <a class="nav-link" href="/tenants/estates/search" data-path="/tenants/estates/search">Search Properties</a>
+                    </li>
+                    <!-- Owner menu items -->
+                    <li class="nav-item" sec:authorize="hasAnyRole('ROLE_OWNER')">
+                        <a class="nav-link" href="/estate/new" data-path="/estate/new">Register Property</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAnyRole('ROLE_OWNER')">
+                        <a class="nav-link" href="/owner/my-properties" data-path="/owner/my-properties">My Properties</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAnyRole('ROLE_OWNER')">
+                        <a class="nav-link" href="/owner/applications" data-path="/owner/applications">Manage Applications</a>
+                    </li>
+                </ul>
+                <!-- Authentication links for non-authenticated users -->
+                <div class="navbar-nav" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" href="/login">Login</a>
+                    <a class="nav-link" href="/register">Register</a>
+                </div>
+                <!-- User info and logout for authenticated users -->
+                <div class="navbar-nav" sec:authorize="isAuthenticated()">
+                    <span class="nav-item nav-link" sec:authentication="name"></span>
+                    <form class="nav-item" th:action="@{/logout}" method="post">
+                        <button class="btn btn-outline-danger" type="submit">Sign Out</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!-- Template for property application form -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="page_layout/header :: head">
+    <title>Apply for Property</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<!-- Include header -->
+<div th:replace="page_layout/header :: header"></div>
+
+<!-- Main content container -->
+<div class="container pt-4 flex-grow-1">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <!-- Error message alert -->
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span th:text="${error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <!-- Application form card -->
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Property Application</h3>
+                </div>
+                <div class="card-body">
+                    <!-- Property details section -->
+                    <div class="mb-4">
+                        <h4>Property Details</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Address:</strong> <span th:text="${estate.address}"></span></p>
+                                <p><strong>City:</strong> <span th:text="${estate.city}"></span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Size:</strong> <span th:text="${estate.size}"></span> m²</p>
+                                <p><strong>Price:</strong> <span th:text="${estate.price}"></span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Application form -->
+                    <form th:action="@{/applications/submit}" method="post" th:object="${application}">
+                        <input type="hidden" name="estateId" th:value="${estate.id}" />
+
+                        <!-- Arrival date input -->
+                        <div class="mb-3">
+                            <label for="arrivalDate" class="form-label">Desired Arrival Date</label>
+                            <input type="date" class="form-control" id="arrivalDate" required
+                                   th:field="*{arrivalDate}" min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" />
+                        </div>
+
+                        <!-- Departure date input -->
+                        <div class="mb-3">
+                            <label for="departureDate" class="form-label">Desired Departure Date</label>
+                            <input type="date" class="form-control" id="departureDate" required
+                                   th:field="*{departureDate}" min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" />
+                        </div>
+
+                        <!-- Form buttons -->
+                        <div class="text-end">
+                            <a th:href="@{/tenants/estates/search}" class="btn btn-secondary me-2">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Submit Application</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include footer -->
+<footer th:replace="page_layout/footer :: footer" class="mt-auto"></footer>
+
+<!-- Bootstrap and Popper JS -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
+
+<!-- Date validation script -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const arrivalDateInput = document.getElementById('arrivalDate');
+        const departureDateInput = document.getElementById('departureDate');
+        
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        arrivalDateInput.min = today;
+        
+        // Ensure departure date is after arrival date
+        arrivalDateInput.addEventListener('change', function() {
+            departureDateInput.min = this.value;
+            if (departureDateInput.value && departureDateInput.value < this.value) {
+                departureDateInput.value = this.value;
+            }
+        });
+    });
+</script>
+</body>
+</html>

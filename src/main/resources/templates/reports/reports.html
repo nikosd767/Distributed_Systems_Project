@@ -1,0 +1,117 @@
+<!-- Template for managing all reports -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+<head th:fragment="head">
+    <title>Reports Management</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Main content section -->
+    <div layout:fragment="main-content" class="container mt-4">
+        <h1>Reports Management</h1>
+
+        <!-- Error message display -->
+        <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
+        
+        <!-- No reports message -->
+        <div th:if="${#lists.isEmpty(reports)}" class="alert alert-info">
+            There are no reports yet.
+        </div>
+
+        <!-- Reports content -->
+        <div th:if="${not #lists.isEmpty(reports)}">
+            <!-- Status filter buttons -->
+            <div class="mb-4">
+                <h4>Filter by Status:</h4>
+                <div class="btn-group" role="group">
+                    <a th:href="@{/reports/list}" 
+                       class="btn me-2"
+                       th:classappend="${currentStatus == null} ? 'btn-primary' : 'btn-outline-primary'">
+                        All
+                    </a>
+                    <a th:href="@{/reports/status/{status}(status='Pending')}" 
+                       class="btn me-2"
+                       th:classappend="${currentStatus == 'Pending'} ? 'btn-warning' : 'btn-outline-warning'">
+                        Pending
+                    </a>
+                    <a th:href="@{/reports/status/{status}(status='Approved')}" 
+                       class="btn"
+                       th:classappend="${currentStatus == 'Approved'} ? 'btn-success' : 'btn-outline-success'">
+                        Approved
+                    </a>
+                </div>
+            </div>
+
+            <!-- Reports table -->
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <!-- Table headers -->
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>User Email</th>
+                        <th>Estate</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Report Date</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <!-- Table body -->
+                    <tbody>
+                    <tr th:each="report : ${reports}">
+                        <td th:text="${report.reportId}"></td>
+                        <td th:text="${report.title}"></td>
+                        <td th:text="${report?.user?.email}"></td>
+                        <!-- Estate information -->
+                        <td>
+                            <th:block th:with="estate=${report?.application?.estate}">
+                                <span th:if="${estate != null}" th:text="${estate.title}"></span>
+                                <span th:unless="${estate != null}">N/A</span>
+                            </th:block>
+                        </td>
+                        <td th:text="${report.description}"></td>
+                        <!-- Status badge -->
+                        <td>
+                            <span th:if="${report.status != null}"
+                                  th:text="${report.status}"
+                                  th:class="${report.status.name() == 'Pending' ? 'badge bg-warning' : 
+                                           (report.status.name() == 'Approved' ? 'badge bg-success' : 'badge bg-danger')}">
+                            </span>
+                            <span th:if="${report.status == null}" class="badge bg-secondary">Unknown</span>
+                        </td>
+                        <td th:text="${report.reportDate != null ? #dates.format(report.reportDate, 'dd-MM-yyyy HH:mm') : ''}"></td>
+                        <!-- Action buttons -->
+                        <td>
+                            <div class="btn-group" role="group">
+                                <!-- Approve button for pending reports -->
+                                <form th:if="${report.status != null && report.status.name() == 'Pending'}" 
+                                      th:action="@{/reports/approve/{id}(id=${report.reportId})}" 
+                                      method="post" 
+                                      style="display: inline;">
+                                    <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                                </form>
+                                <!-- Delete report button -->
+                                <form th:action="@{/reports/delete/{id}(id=${report.reportId})}" 
+                                      method="post" 
+                                      style="display: inline;">
+                                    <button type="submit" 
+                                            class="btn btn-sm btn-danger" 
+                                            onclick="return confirm('Are you sure?')">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

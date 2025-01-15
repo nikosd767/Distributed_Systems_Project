@@ -1,0 +1,54 @@
+<!-- Login page template that extends the base layout -->
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+<head>
+    <title>Login</title>
+</head>
+<body>
+<!-- Main content section -->
+<div layout:fragment="main-content">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <!-- Login card -->
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Login</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Error message display -->
+                    <div th:if="${param.error}" class="alert alert-danger">
+                        <span th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'] != null ? session['SPRING_SECURITY_LAST_EXCEPTION'].message : 'Invalid username or password'}">
+                            Invalid username or password
+                        </span>
+                    </div>
+                    <!-- Logout success message -->
+                    <div th:if="${param.logout}" class="alert alert-success">
+                        You have been logged out.
+                    </div>
+                    <!-- Login form -->
+                    <form th:action="@{/login}" method="post">
+                        <!-- Username field -->
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <!-- Password field -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <!-- Submit button -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Sign In</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

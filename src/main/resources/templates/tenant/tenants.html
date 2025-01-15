@@ -1,0 +1,61 @@
+<!-- Template for displaying list of tenants -->
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Tenants</title>
+</head>
+<body>
+<!-- Main content section -->
+<div layout:fragment="main-content">
+  <div class="container mt-4">
+    <!-- Header section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>Tenants</h2>
+    </div>
+    <!-- Tenants table -->
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <!-- Table headers -->
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Surname</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <!-- Table body -->
+        <tbody>
+        <tr th:each="tenant : ${tenants}">
+          <td th:text="${tenant.firstName}"></td>
+          <td th:text="${tenant.lastName}"></td>
+          <td th:text="${tenant.email}"></td>
+          <!-- Action buttons -->
+          <td>
+            <div class="btn-group">
+              <a th:href="@{/tenants/view/{id}(id=${tenant.id})}" class="btn btn-outline-info btn-sm me-2">View</a>
+              <a th:href="@{/tenants/{id}(id=${tenant.id})}" class="btn btn-outline-primary btn-sm me-2">Edit</a>
+              <!-- Delete tenant form with confirmation -->
+              <form th:action="@{/tenants/{id}/delete(id=${tenant.id})}" method="post" style="display: inline;"
+                    onsubmit="return confirm('Are you sure you want to delete this tenant? This will also delete all associated applications and reports.');">
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- No tenants message -->
+    <div th:if="${#lists.isEmpty(tenants)}" class="alert alert-info mt-3">
+      No tenants found!
+    </div>
+  </div>
+</div>
+</body>
+</html>

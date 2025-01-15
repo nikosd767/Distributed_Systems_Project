@@ -1,0 +1,97 @@
+<!-- Estate form template for creating and editing estates -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="page_layout/header :: head">
+</head>
+<body>
+<!-- Include header -->
+<div th:replace="page_layout/header :: header"></div>
+<!-- Main content container -->
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <!-- Estate form card -->
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <!-- Dynamic header based on create/edit mode -->
+          <h3 class="mb-0" th:text="${estate.id != null} ? 'Edit Estate' : 'New Estate'"></h3>
+        </div>
+        <div class="card-body">
+          <!-- Error and success messages -->
+          <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+            <span th:text="${errorMessage}"></span>
+          </div>
+          <div th:if="${successMessage}" class="alert alert-success" role="alert">
+            <span th:text="${successMessage}"></span>
+          </div>
+          <!-- Estate form with dynamic action URL -->
+          <form th:action="${estate.id != null} ? @{/estate/{id}/update(id=${estate.id})} : @{/estate/new}" th:object="${estate}" method="post" class="needs-validation" novalidate>
+            <input type="hidden" th:field="*{id}">
+            
+            <!-- Title field -->
+            <div class="mb-3">
+              <label for="title" class="form-label">Title</label>
+              <input type="text" class="form-control" id="title" th:field="*{title}" required minlength="3" maxlength="50">
+              <div class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title error</div>
+            </div>
+
+            <!-- City field -->
+            <div class="mb-3">
+              <label for="city" class="form-label">City</label>
+              <input type="text" class="form-control" id="city" th:field="*{city}" required>
+              <div class="text-danger" th:if="${#fields.hasErrors('city')}" th:errors="*{city}">City error</div>
+            </div>
+
+            <!-- Address field -->
+            <div class="mb-3">
+              <label for="address" class="form-label">Address</label>
+              <input type="text" class="form-control" id="address" th:field="*{address}" required>
+              <div class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Address error</div>
+            </div>
+
+            <!-- Description field -->
+            <div class="mb-3">
+              <label for="description" class="form-label">Description</label>
+              <textarea class="form-control" id="description" th:field="*{description}" rows="3"></textarea>
+              <div class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+            </div>
+
+            <!-- Price field -->
+            <div class="mb-3">
+              <label for="price" class="form-label">Price (€)</label>
+              <input type="number" class="form-control" id="price" th:field="*{price}" required step="0.01">
+              <div class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Price error</div>
+            </div>
+
+            <!-- Size field -->
+            <div class="mb-3">
+              <label for="size" class="form-label">Size (m²)</label>
+              <input type="number" class="form-control" id="size" th:field="*{size}" required>
+              <div class="text-danger" th:if="${#fields.hasErrors('size')}" th:errors="*{size}">Size error</div>
+            </div>
+
+            <!-- Year of manufacture field -->
+            <div class="mb-3">
+              <label for="yearOfManufacture" class="form-label">Year of Manufacture</label>
+              <input type="number" class="form-control" id="yearOfManufacture" th:field="*{yearOfManufacture}" required>
+              <div class="text-danger" th:if="${#fields.hasErrors('yearOfManufacture')}" th:errors="*{yearOfManufacture}">Year error</div>
+            </div>
+
+            <!-- Form buttons -->
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary" th:text="${estate.id != null} ? 'Update Estate' : 'Save Estate'">Save Estate</button>
+              <a th:href="@{/owner/my-properties}" class="btn btn-secondary">Back to List</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Include footer -->
+<div th:replace="page_layout/footer :: footer"></div>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

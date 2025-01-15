@@ -1,0 +1,133 @@
+<!-- Estates list template that extends the base layout -->
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Estates List</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+    <!-- Custom styles for filter buttons -->
+    <style>
+        .filter-btn {
+            margin-right: 5px;
+            border-radius: 20px;
+        }
+        .filter-btn.active {
+            box-shadow: 0 0 0 2px #fff, 0 0 0 4px #0d6efd;
+        }
+    </style>
+</head>
+<body>
+<!-- Main content section -->
+<div layout:fragment="main-content">
+    <div class="container mt-4">
+        <h1>Estates Management</h1>
+        
+        <!-- Success message display -->
+        <div th:if="${successMessage}" class="alert alert-success" role="alert">
+            <span th:text="${successMessage}"></span>
+        </div>
+
+        <!-- Filter and Add New Estate buttons -->
+        <div class="d-flex justify-content-between align-items-start mb-4">
+            <!-- Status filter buttons -->
+            <div>
+                <h4>Filter by Status:</h4>
+                <div class="btn-group" role="group">
+                    <a th:href="@{/estate}" 
+                       class="btn me-2"
+                       th:classappend="${filter == null} ? 'btn-primary' : 'btn-outline-primary'">
+                        All
+                    </a>
+                    <a th:href="@{/estate(filter='pending')}" 
+                       class="btn me-2"
+                       th:classappend="${filter == 'pending'} ? 'btn-warning' : 'btn-outline-warning'">
+                        Pending
+                    </a>
+                    <a th:href="@{/estate(filter='approved')}" 
+                       class="btn"
+                       th:classappend="${filter == 'approved'} ? 'btn-success' : 'btn-outline-success'">
+                        Approved
+                    </a>
+                </div>
+            </div>
+            <!-- Add New Estate button (only for owners) -->
+            <div sec:authorize="hasRole('ROLE_OWNER')">
+                <a th:href="@{/estate/new}" class="btn btn-primary">Add New Estate</a>
+            </div>
+        </div>
+
+        <!-- Empty state message -->
+        <div th:if="${#lists.isEmpty(estates)}" class="alert alert-info">
+            There are no estates yet.
+        </div>
+
+        <!-- Estates table -->
+        <div th:if="${not #lists.isEmpty(estates)}" class="table-responsive">
+            <table class="table table-striped">
+                <!-- Table headers -->
+                <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>City</th>
+                    <th>Address</th>
+                    <th>Price</th>
+                    <th>Size (m&sup2;)</th>
+                    <th>Tenant Status</th>
+                    <th>Admin Status</th>
+                    <th>Year</th>
+                    <th>Owner</th>
+                    <th sec:authorize="hasRole('ROLE_ADMIN')">Actions</th>
+                </tr>
+                </thead>
+                <!-- Table body -->
+                <tbody>
+                <tr th:each="estate : ${estates}">
+                    <td th:text="${estate.title}"></td>
+                    <td th:text="${estate.city}"></td>
+                    <td th:text="${estate.address}"></td>
+                    <td th:text="${estate.price}"></td>
+                    <td th:text="${estate.size}"></td>
+                    <!-- Tenant status badge -->
+                    <td>
+                        <span class="badge" th:classappend="${estate.estateStatusForTenant.name() == 'Not_occupied'} ? 'bg-info' : 'bg-danger'"
+                              th:text="${estate.estateStatusForTenant}"></span>
+                    </td>
+                    <!-- Admin status badge -->
+                    <td>
+                        <span class="badge" th:classappend="${estate.estateStatusForAdmin.name() == 'Pending'} ? 'bg-warning text-dark' : 'bg-success'"
+                              th:text="${estate.estateStatusForAdmin}"></span>
+                    </td>
+                    <td th:text="${estate.yearOfManufacture}"></td>
+                    <td th:text="${estate.owner != null ? estate.owner.firstName + ' ' + estate.owner.lastName : 'Not Assigned'}"></td>
+                    <!-- Admin actions -->
+                    <td sec:authorize="hasRole('ROLE_ADMIN')">
+                        <div class="btn-group" role="group">
+                            <!-- Approve estate button -->
+                            <form th:if="${estate.estateStatusForAdmin.name() == 'Pending'}" 
+                                  th:action="@{/estate/{id}/approve(id=${estate.id})}" 
+                                  method="post" 
+                                  style="display: inline;">
+                                <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                            </form>
+                            <!-- Delete estate button -->
+                            <form th:action="@{/estate/{id}/delete(id=${estate.id})}" 
+                                  method="post" 
+                                  style="display: inline;">
+                                <button type="submit" 
+                                        class="btn btn-sm btn-danger" 
+                                        onclick="return confirm('Are you sure?')">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

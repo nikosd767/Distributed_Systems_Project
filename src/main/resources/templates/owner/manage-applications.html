@@ -1,0 +1,100 @@
+<!-- Template for property owners to manage tenant applications for their properties -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="page_layout/header :: head">
+    <title>Manage Applications</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<!-- Include header -->
+<div th:replace="page_layout/header :: header"></div>
+
+<!-- Main content container -->
+<div class="container pt-4 flex-grow-1">
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Success message alert -->
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <!-- Error message alert -->
+            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span th:text="${errorMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <!-- Applications management card -->
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Manage Property Applications</h3>
+                </div>
+                <div class="card-body">
+                    <!-- Loop through each estate -->
+                    <div th:each="estate : ${estates}" class="mb-4">
+                        <h4 th:text="${estate.address + ', ' + estate.city}"></h4>
+
+                        <!-- No applications message -->
+                        <div th:if="${applications[estate.id].empty}" class="alert alert-info">
+                            No applications for this property yet.
+                        </div>
+
+                        <!-- Applications table -->
+                        <div th:if="${!applications[estate.id].empty}" class="table-responsive">
+                            <table class="table table-hover">
+                                <!-- Table headers -->
+                                <thead>
+                                <tr>
+                                    <th>Tenant Name</th>
+                                    <th>Email</th>
+                                    <th>Arrival Date</th>
+                                    <th>Departure Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <!-- Table body -->
+                                <tbody>
+                                <tr th:each="app : ${applications[estate.id]}">
+                                    <td th:text="${app.tenant.firstName + ' ' + app.tenant.lastName}"></td>
+                                    <td th:text="${app.tenant.email}"></td>
+                                    <td th:text="${#temporals.format(app.arrivalDate, 'dd-MM-yyyy')}"></td>
+                                    <td th:text="${#temporals.format(app.departureDate, 'dd-MM-yyyy')}"></td>
+                                    <!-- Application status badge -->
+                                    <td>
+                                                <span th:class="${'badge ' +
+                                                    (app.status == 'PENDING' ? 'bg-warning' :
+                                                     app.status == 'APPROVED' ? 'bg-success' : 'bg-danger')}"
+                                                      th:text="${app.status}">
+                                                </span>
+                                    </td>
+                                    <!-- Action buttons for pending applications -->
+                                    <td th:if="${app.status == 'PENDING'}">
+                                        <!-- Approve application form -->
+                                        <form th:action="@{/owner/applications/{id}/status(id=${app.id})}" method="post" style="display: inline;">
+                                            <input type="hidden" name="status" value="APPROVED"/>
+                                            <button type="submit" class="btn btn-success btn-sm me-2">Approve</button>
+                                        </form>
+                                        <!-- Delete application form -->
+                                        <form th:action="@{/owner/applications/{id}/delete(id=${app.id})}" method="post" style="display: inline;">
+                                            <button type="submit" class="btn btn-danger btn-sm">Deny</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include footer -->
+<footer th:replace="page_layout/footer :: footer" class="mt-auto"></footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

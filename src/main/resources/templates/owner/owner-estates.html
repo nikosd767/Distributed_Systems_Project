@@ -1,0 +1,80 @@
+<!-- Template for displaying properties owned by a specific owner -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Owner's Properties</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+</head>
+<body>
+<!-- Main content container -->
+<div class="container mt-4">
+  <!-- Header section with owner name and back button -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Properties Owned by <span th:text="${owners.firstName + ' ' + owners.lastName}"></span></h2>
+    <a th:href="@{/owner}" class="btn btn-secondary">Back to Owners</a>
+  </div>
+
+  <!-- Properties table -->
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <!-- Table headers -->
+      <thead>
+      <tr>
+        <th>Title</th>
+        <th>Address</th>
+        <th>Price</th>
+        <th>Size</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <!-- Table body -->
+      <tbody>
+      <tr th:each="estate : ${estates}">
+        <td th:text="${estate.title}"></td>
+        <td th:text="${estate.address}"></td>
+        <td th:text="${estate.price}"></td>
+        <td th:text="${estate.size + ' m²'}"></td>
+        <td th:text="${estate.status}"></td>
+        <!-- Action buttons -->
+        <td>
+          <div class="btn-group">
+            <a th:href="@{/estate/{id}(id=${estate.id})}"
+               class="btn btn-info btn-sm">View</a>
+            <button type="button"
+                    class="btn btn-danger btn-sm"
+                    th:onclick="'deleteEstate(' + ${estate.id} + ')'">Remove</button>
+          </div>
+        </td>
+      </tr>
+      <!-- No properties found message -->
+      <tr th:if="${estates}">
+        <td colspan="6" class="text-center">No properties found</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- JavaScript for handling estate deletion -->
+<script>
+  function deleteEstate(estateId) {
+    if (confirm('Are you sure you want to remove this property?')) {
+      fetch(`/owner/estates/${estateId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => {
+        if (response.ok) {
+          window.location.reload();
+        } else {
+          alert('Error removing property');
+        }
+      });
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!-- Template for displaying user's reports -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+<head>
+    <title>My Reports</title>
+    <!-- Custom styles for layout -->
+    <style>
+        html, body {
+            height: 100%;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        .content-wrapper {
+            flex: 1 0 auto;
+        }
+        footer {
+            flex-shrink: 0;
+            padding: 20px 0;
+            background-color: #f8f9fa;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main content section -->
+    <div layout:fragment="main-content" class="content-wrapper">
+        <div class="container mt-4">
+            <h2>My Reports</h2>
+            
+            <!-- Error message display -->
+            <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
+            
+            <!-- No reports message -->
+            <div th:if="${#lists.isEmpty(reports)}" class="alert alert-info">
+                You don't have any reports yet.
+            </div>
+            
+            <!-- Reports table -->
+            <div th:if="${not #lists.isEmpty(reports)}" class="table-responsive">
+                <table class="table table-striped">
+                    <!-- Table headers -->
+                    <thead>
+                        <tr>
+                            <th>Report ID</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Estate</th>
+                            <th>Status</th>
+                            <th>Report Date</th>
+                        </tr>
+                    </thead>
+                    <!-- Table body -->
+                    <tbody>
+                        <tr th:each="report : ${reports}">
+                            <td th:text="${report.reportId}"></td>
+                            <td th:text="${report.title}"></td>
+                            <td th:text="${report.description}"></td>
+                            <td th:text="${report.application != null ? report.application.estate.title : 'N/A'}"></td>
+                            <!-- Report status badge -->
+                            <td>
+                                <span th:if="${report.status != null}"
+                                      th:text="${report.status}"
+                                      th:class="${report.status.name() == 'Pending' ? 'badge bg-warning' : 
+                                               (report.status.name() == 'Approved' ? 'badge bg-success' : '')}">
+                                </span>
+                                <span th:if="${report.status == null}" class="badge bg-secondary">Unknown</span>
+                            </td>
+                            <td th:text="${report.reportDate != null ? #dates.format(report.reportDate, 'dd-MM-yyyy HH:mm') : ''}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

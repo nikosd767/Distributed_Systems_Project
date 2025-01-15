@@ -1,0 +1,70 @@
+<!-- Template for displaying detailed tenant information -->
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Tenant</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<!-- Main content section -->
+<div layout:fragment="main-content">
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <!-- Tenant profile card -->
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0">Tenant Profile</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Full name section -->
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Full Name</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary" 
+                                 th:text="${tenant.firstName + ' ' + tenant.lastName}">
+                            </div>
+                        </div>
+                        
+                        <!-- Email section -->
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Email</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary" 
+                                 th:text="${tenant.email}">
+                            </div>
+                        </div>
+                        
+                        <!-- Phone number section -->
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Phone Number</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary" 
+                                 th:text="${tenant.phoneNumber}">
+                            </div>
+                        </div>
+                        <!-- Navigation button -->
+                        <div class="row mt-4">
+                            <div class="col">
+                                <a th:href="@{/tenants}" class="btn btn-secondary">Back to Tenants List</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

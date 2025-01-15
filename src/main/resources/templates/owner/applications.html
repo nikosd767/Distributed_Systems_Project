@@ -1,0 +1,78 @@
+<!-- Template for owners to manage tenant applications -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Manage Applications</title>
+</head>
+<body>
+<!-- Main content section -->
+<div layout:fragment="content">
+    <div class="container mt-4">
+        <h2>Manage Applications</h2>
+
+        <!-- Filter buttons -->
+        <div class="mb-3">
+            <a th:href="@{/owner/applications}" class="btn btn-primary me-2">All Applications</a>
+            <a th:href="@{/owner/applications/pending}" class="btn btn-warning">Pending Applications</a>
+        </div>
+
+        <!-- Applications table -->
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <!-- Table headers -->
+                <thead>
+                <tr>
+                    <th>Estate</th>
+                    <th>Tenant</th>
+                    <th>Arrival Date</th>
+                    <th>Departure Date</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <!-- Table body -->
+                <tbody>
+                <tr th:each="application : ${applications}">
+                    <td th:text="${application.estate.title}"></td>
+                    <td th:text="${application.tenant.firstName + ' ' + application.tenant.lastName}"></td>
+                    <td th:text="${#temporals.format(application.arrivalDate, 'dd-MM-yyyy')}"></td>
+                    <td th:text="${#temporals.format(application.departureDate, 'dd-MM-yyyy')}"></td>
+                    <!-- Application status badge -->
+                    <td>
+                        <span th:class="${'badge ' + (application.status == 'PENDING' ? 'bg-warning' :
+                                       (application.status == 'APPROVED' ? 'bg-success' : 'bg-danger'))}"
+                              th:text="${application.status}">
+                        </span>
+                    </td>
+                    <td th:text="${#temporals.format(application.createdAt, 'dd-MM-yyyy')}"></td>
+                    <!-- Action buttons for pending applications -->
+                    <td>
+                        <div th:if="${application.status == 'PENDING'}" class="btn-group">
+                            <!-- Approve application form -->
+                            <form th:action="@{/owner/applications/{id}/status(id=${application.id})}" method="post" style="display: inline;">
+                                <input type="hidden" name="status" value="APPROVED"/>
+                                <button type="submit" class="btn btn-success btn-sm me-1">Approve</button>
+                            </form>
+                            <!-- Reject application form -->
+                            <form th:action="@{/owner/applications/{id}/status(id=${application.id})}" method="post" style="display: inline;">
+                                <input type="hidden" name="status" value="REJECTED"/>
+                                <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                            </form>
+                        </div>
+                        <!-- Status badge for non-pending applications -->
+                        <span th:unless="${application.status == 'PENDING'}"
+                              th:text="${application.status}"
+                              th:class="${'badge ' + (application.status == 'APPROVED' ? 'bg-success' : 'bg-danger')}">
+                        </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
