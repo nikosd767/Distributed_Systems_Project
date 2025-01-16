@@ -4,7 +4,7 @@ The following commands are used to compile and run the Real Estate project. \
 Main in RealEstatesApplication.class provides a simple code in collaboration with \
 Spring Boot in order to run the program and check if the combination of the \
 classes(entities, service, repositories, controllers) manages to create a Real \
-Estate app with all the functions referred to the pronunciation of the project. \
+Estate app with all the functions referred to the pronunciation of the project. 
 
 
 ## Usage
