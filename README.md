@@ -9,6 +9,12 @@ Estate app with all the functions referred to the pronunciation of the project. 
 
 ## Usage
 
+Clone Project using 
+
+```
+git clone https://github.com/nikosd767/Distributed_Systems_Project.git 
+```
+
 Compile using 
 
 ```
