@@ -8,8 +8,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tenant Details</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/form-styles.css">
 </head>
 <body>
 <!-- Main content container -->
@@ -17,45 +16,87 @@
   <div class="container mt-4">
     <div class="row">
       <div class="col-md-8 offset-md-2">
+        <!-- Success message -->
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+          <span th:text="${successMessage}"></span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <!-- Error message -->
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+          <span th:text="${errorMessage}"></span>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
         <!-- Tenant form card -->
-        <div class="card">
+        <div class="card form-card">
           <!-- Dynamic header based on create/edit mode -->
           <div class="card-header">
             <h3 th:text="${tenant.id != null} ? 'Edit Tenant' : 'New Tenant'"></h3>
           </div>
           <div class="card-body">
             <!-- Tenant form -->
-            <form th:action="${tenant.id != null} ? @{/tenants/{id}(id=${tenant.id})} : @{/tenants/new}" th:object="${tenant}" method="post">
+            <form th:action="@{${tenant.id != null ? '/tenants/' + tenant.id : '/tenants/new'}}"
+                  th:object="${tenant}"
+                  method="post">
               <input type="hidden" th:field="*{id}">
 
               <!-- First name field -->
-              <div class="mb-3">
+              <div class="mb-4">
                 <label for="firstName" class="form-label">First Name</label>
-                <input type="text" class="form-control" id="firstName" th:field="*{firstName}" required>
+                <input type="text"
+                       class="form-control"
+                       id="firstName"
+                       th:field="*{firstName}"
+                       th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid'"
+                       required>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
               </div>
 
               <!-- Last name field -->
-              <div class="mb-3">
+              <div class="mb-4">
                 <label for="lastName" class="form-label">Last Name</label>
-                <input type="text" class="form-control" id="lastName" th:field="*{lastName}" required>
+                <input type="text"
+                       class="form-control"
+                       id="lastName"
+                       th:field="*{lastName}"
+                       th:classappend="${#fields.hasErrors('lastName')} ? 'is-invalid'"
+                       required>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
               </div>
 
               <!-- Email field -->
-              <div class="mb-3">
+              <div class="mb-4">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" th:field="*{email}" required>
+                <input type="email"
+                       class="form-control"
+                       id="email"
+                       th:field="*{email}"
+                       th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'"
+                       required>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
               </div>
 
               <!-- Phone number field -->
-              <div class="mb-3">
+              <div class="mb-4">
                 <label for="phoneNumber" class="form-label">Phone Number</label>
-                <input type="tel" class="form-control" id="phoneNumber" th:field="*{phoneNumber}" required>
+                <input type="tel"
+                       class="form-control"
+                       id="phoneNumber"
+                       th:field="*{phoneNumber}"
+                       th:classappend="${#fields.hasErrors('phoneNumber')} ? 'is-invalid'"
+                       required>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
               </div>
 
               <!-- Form buttons -->
-              <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-primary">Save Tenant</button>
-                <a th:href="@{/tenants}" class="btn btn-secondary">Back to List</a>
+              <div class="form-buttons">
+                <button type="submit" class="btn btn-primary">
+                  <i class="fas fa-save me-2"></i>Save Tenant
+                </button>
+                <a th:href="@{/tenants}" class="btn btn-secondary">
+                  <i class="fas fa-arrow-left me-2"></i>Back to List
+                </a>
               </div>
             </form>
           </div>

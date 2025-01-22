@@ -1,37 +1,47 @@
-<!-- Template for displaying no approved applications message -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="page_layout/header :: head"></head>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>No Approved Applications</title>
+    <link rel="stylesheet" href="/css/table-styles.css">
+    <link rel="stylesheet" href="/css/form-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
 <body>
-    <!-- Include header -->
-    <header th:replace="page_layout/header :: header"></header>
-
-    <!-- Main content container -->
-    <div class="container mt-5">
+<div layout:fragment="main-content">
+    <div class="container mt-4">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <!-- Message card -->
-                <div class="card">
-                    <div class="card-body text-center">
-                        <h3 class="card-title">No Approved Applications</h3>
-                        <!-- Error message alert -->
-                        <div class="alert alert-info" th:text="${error}">
-                            You don't have any approved applications yet.
+                <div class="form-card card">
+                    <div class="card-body text-center p-5">
+                        <div class="mb-4">
+                            <i class="fas fa-clipboard-list fa-4x" style="color: #578E7E;"></i>
                         </div>
-                        <!-- Explanation text -->
-                        <p class="card-text">
+                        <h2 class="page-header mb-4">No Approved Applications</h2>
+                        
+                        <div class="alert mb-4" style="background-color: #F4ECD5; border: none; border-radius: 8px; color: #3D3D3D;">
+                            <i class="fas fa-info-circle me-2" style="color: #578E7E;"></i>
+                            <span th:text="${error}">No approved applications found.</span>
+                        </div>
+                        
+                        <p class="text-muted mb-4" style="color: #3D3D3D;">
+                            <i class="fas fa-exclamation-circle me-2" style="color: #578E7E;"></i>
                             You need to have at least one approved application before you can submit a report.
                             Please wait for your applications to be approved by the estate owners.
                         </p>
-                        <!-- Navigation button -->
-                        <a href="/" class="btn btn-primary">Return to Home</a>
+                        
+                        <div class="d-flex justify-content-center">
+                            <a href="/" class="btn btn-primary">
+                                <i class="fas fa-home me-2"></i>Return to Home
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</div>
 </body>
 </html>

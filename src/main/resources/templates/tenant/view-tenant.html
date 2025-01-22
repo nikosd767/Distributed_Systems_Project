@@ -7,9 +7,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Tenant</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>View Tenant - Real Estate Management</title>
+    <link rel="stylesheet" th:href="@{/css/form-styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 <!-- Main content section -->
@@ -17,46 +17,46 @@
     <div class="container mt-4">
         <div class="row">
             <div class="col-md-8 offset-md-2">
+                <!-- Success message -->
+                <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <span th:text="${successMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
                 <!-- Tenant profile card -->
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
+                <div class="card form-card">
+                    <div class="card-header">
                         <h3 class="mb-0">Tenant Profile</h3>
                     </div>
                     <div class="card-body">
                         <!-- Full name section -->
-                        <div class="row mb-3">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">Full Name</h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary" 
-                                 th:text="${tenant.firstName + ' ' + tenant.lastName}">
-                            </div>
+                        <div class="profile-section">
+                            <div class="profile-label">Full Name</div>
+                            <div class="profile-value" th:text="${tenant.firstName + ' ' + tenant.lastName}"></div>
                         </div>
-                        
+
                         <!-- Email section -->
-                        <div class="row mb-3">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">Email</h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary" 
-                                 th:text="${tenant.email}">
-                            </div>
+                        <div class="profile-section">
+                            <div class="profile-label">Email</div>
+                            <div class="profile-value" th:text="${tenant.email}"></div>
                         </div>
-                        
+
                         <!-- Phone number section -->
-                        <div class="row mb-3">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">Phone Number</h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary" 
-                                 th:text="${tenant.phoneNumber}">
-                            </div>
+                        <div class="profile-section">
+                            <div class="profile-label">Phone Number</div>
+                            <div class="profile-value" th:text="${tenant.phoneNumber}"></div>
                         </div>
-                        <!-- Navigation button -->
-                        <div class="row mt-4">
-                            <div class="col">
-                                <a th:href="@{/tenants}" class="btn btn-secondary">Back to Tenants List</a>
-                            </div>
+
+                        <!-- Action buttons -->
+                        <div class="action-buttons">
+                            <a th:href="@{/tenants/{id}(id=${tenant.id})}" class="btn-edit">
+                                <i class="fas fa-edit"></i>
+                                Edit Tenant
+                            </a>
+                            <a th:href="@{/tenants}" class="btn-back">
+                                <i class="fas fa-arrow-left"></i>
+                                Back to List
+                            </a>
                         </div>
                     </div>
                 </div>

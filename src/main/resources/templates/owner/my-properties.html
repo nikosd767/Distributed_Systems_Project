@@ -1,61 +1,78 @@
 <!-- Template for owners to view and manage their properties -->
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{page_layout/layout}" xmlns:sec="http://www.w3.org/1999/xhtml">
+      layout:decorate="~{page_layout/layout}">
 <head>
-    <title>Estates List</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+    <title>My Properties - Real Estate Management</title>
+    <link rel="stylesheet" th:href="@{/css/table-styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
-<!-- Main content section -->
+<body class="d-flex flex-column min-vh-100">
 <div layout:fragment="main-content">
-    <div class="container mt-4">
-        <!-- Success message alert -->
-        <div th:if="${successMessage}" class="alert alert-success" role="alert">
+    <div class="container pt-4 flex-grow-1">
+        <!-- Error and success messages -->
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert" 
+             style="background-color: #FFE6E6; color: #DC3545; border-color: #DC3545; border-radius: 8px;">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert"
+             style="background-color: #E8F5E9; color: #2E7D32; border-color: #2E7D32; border-radius: 8px;">
+            <i class="fas fa-check-circle me-2"></i>
             <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        <!-- Header section -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <!-- Page header -->
+        <div class="page-header">
+            <h2><i class="fas fa-home me-2"></i>My Properties</h2>
         </div>
+
         <!-- Properties table -->
         <div class="table-responsive">
-            <table class="table table-striped">
-                <!-- Table headers -->
+            <table class="table">
                 <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>City</th>
-                    <th>Address</th>
-                    <th>Price</th>
-                    <th>Size (m&sup2;)</th>
-                    <th>Status</th>
-                    <th>Year</th>
-                    <th>Owner</th>
-                    <th>Actions</th>
-                </tr>
+                    <tr style="background-color: #5B9A8B;">
+                        <th style="color: #F4ECD5"><i class="fas fa-bookmark me-2"></i>TITLE</th>
+                        <th style="color: #F4ECD5"><i class="fas fa-map-marker me-2"></i>ADDRESS</th>
+                        <th style="color: #F4ECD5"><i class="fas fa-building me-2"></i>CITY</th>
+                        <th style="color: #F4ECD5"><i class="fas fa-euro-sign me-2"></i>PRICE</th>
+                        <th style="color: #F4ECD5"><i class="fas fa-ruler-combined me-2"></i>SIZE</th>
+                        <th style="color: #F4ECD5"><i class="fas fa-calendar me-2"></i>YEAR</th>
+                        <th style="color: #F4ECD5"><i class="fas fa-circle me-2"></i>STATUS</th>
+                        <th style="color: #F4ECD5"><i class="fas fa-cog me-2"></i>ACTIONS</th>
+                    </tr>
                 </thead>
-                <!-- Table body -->
                 <tbody>
-                <tr th:each="estate : ${estates}">
-                    <td th:text="${estate.title}"></td>
-                    <td th:text="${estate.city}"></td>
-                    <td th:text="${estate.address}"></td>
-                    <td th:text="${estate.price}"></td>
-                    <td th:text="${estate.size}"></td>
-                    <td th:text="${estate.estateStatusForTenant}"></td>
-                    <td th:text="${estate.yearOfManufacture}"></td>
-                    <td th:text="${estate.owner != null ? estate.owner.firstName + ' ' + estate.owner.lastName : 'Not Assigned'}"></td>
-                    <!-- Action buttons -->
-                    <td>
-                        <div class="btn-group">
-                            <a th:href="@{/estate/{id}/update(id=${estate.id})}" class="btn btn-outline-info btn-sm">Update</a>
-                        </div>
-                    </td>
-
-                </tr>
+                    <tr th:each="estate : ${estates}">
+                        <td th:text="${estate.title}"></td>
+                        <td th:text="${estate.address}"></td>
+                        <td th:text="${estate.city}"></td>
+                        <td th:text="${estate.price} + '€'"></td>
+                        <td th:text="${estate.size} + ' m²'"></td>
+                        <td th:text="${estate.yearOfManufacture}"></td>
+                        <td>
+                            <span th:if="${estate.estateStatusForTenant != null and estate.estateStatusForTenant.name() == 'Occupied'}" 
+                                  class="badge bg-danger">Occupied</span>
+                            <span th:unless="${estate.estateStatusForTenant != null and estate.estateStatusForTenant.name() == 'Occupied'}" 
+                                  class="badge bg-success">Available</span>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a th:href="@{/estate/{id}/update(id=${estate.id})}" 
+                                   class="btn btn-primary btn-sm" title="Edit">
+                                    <i class="fas fa-edit me-2"></i>Edit
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(estates)}">
+                        <td colspan="8" class="text-center">
+                            <i class="fas fa-info-circle me-2"></i>No properties found
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>

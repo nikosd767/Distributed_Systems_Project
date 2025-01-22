@@ -1,124 +1,162 @@
-<!-- Template for property search and results -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-<head th:replace="page_layout/header :: head">
-    <title>Search Properties</title>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+<head>
+    <title>Search Properties - Real Estate Management</title>
+    <link rel="stylesheet" th:href="@{/css/form-styles.css}">
+    <link rel="stylesheet" th:href="@{/css/table-styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="d-flex flex-column min-vh-100">
 <!-- Include header -->
 <div th:replace="page_layout/header :: header"></div>
 
-<!-- Main content container -->
-<div class="container pt-4 flex-grow-1">
-    <div class="row">
-        <div class="col-md-12">
-            <!-- Search card -->
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0">Search Available Properties</h3>
-                </div>
-                <div class="card-body">
-                    <!-- Search form -->
-                    <form action="/tenants/estates/search" method="get" class="mb-4">
-                        <div class="row g-3">
-                            <!-- Price range inputs -->
-                            <div class="col-md-3">
-                                <label for="minPrice" class="form-label">Min Price</label>
-                                <input type="number" class="form-control" id="minPrice" name="minPrice"
-                                       th:value="${param.minPrice}" step="0.01">
-                            </div>
-                            <div class="col-md-3">
-                                <label for="maxPrice" class="form-label">Max Price</label>
-                                <input type="number" class="form-control" id="maxPrice" name="maxPrice"
-                                       th:value="${param.maxPrice}" step="0.01">
-                            </div>
-                            <!-- Location input -->
-                            <div class="col-md-3">
-                                <label for="location" class="form-label">Location</label>
-                                <input type="text" class="form-control" id="location" name="location"
-                                       th:value="${param.location}" placeholder="City or Address">
-                            </div>
-                            <!-- Year built input -->
-                            <div class="col-md-3">
-                                <label for="yearOfManufacture" class="form-label">Year Built</label>
-                                <input type="number" class="form-control" id="yearOfManufacture" name="yearOfManufacture"
-                                       th:value="${param.yearOfManufacture}" min="1800" max="2025">
-                            </div>
-                            <!-- Size range inputs -->
-                            <div class="col-md-3">
-                                <label for="minSize" class="form-label">Min Size (m²)</label>
-                                <input type="number" class="form-control" id="minSize" name="minSize"
-                                       th:value="${param.minSize}" step="0.01" min="0">
-                            </div>
-                            <div class="col-md-3">
-                                <label for="maxSize" class="form-label">Max Size (m²)</label>
-                                <input type="number" class="form-control" id="maxSize" name="maxSize"
-                                       th:value="${param.maxSize}" step="0.01" min="0">
-                            </div>
-                            <!-- Occupancy status dropdown -->
-                            <div class="col-md-3">
-                                <label for="occupancyStatus" class="form-label">Occupancy Status</label>
-                                <select class="form-select" id="occupancyStatus" name="occupancyStatus">
-                                    <option value="">All</option>
-                                    <option value="Not_occupied" th:selected="${param.occupancyStatus == 'Not_occupied'}">Available</option>
-                                    <option value="Occupied" th:selected="${param.occupancyStatus == 'Occupied'}">Occupied</option>
-                                </select>
-                            </div>
-                            <!-- Form buttons -->
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-primary">Search</button>
-                                <a href="/tenants/estates/search" class="btn btn-secondary">Clear Filters</a>
-                            </div>
-                        </div>
-                    </form>
-
-                    <!-- Search results section -->
-                    <div th:if="${estates != null}">
-                        <h4 class="mb-3">Search Results</h4>
-                        <!-- No results message -->
-                        <div th:if="${estates.empty}" class="alert alert-info">
-                            No properties found matching your criteria.
-                        </div>
-                        <!-- Results table -->
-                        <div th:if="${!estates.empty}" class="table-responsive">
-                            <table class="table table-hover">
-                                <!-- Table headers -->
-                                <thead>
-                                <tr>
-                                    <th>City</th>
-                                    <th>Address</th>
-                                    <th>Size (m²)</th>
-                                    <th>Price</th>
-                                    <th>Year Built</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                                </thead>
-                                <!-- Table body -->
-                                <tbody>
-                                <tr th:each="estate : ${estates}">
-                                    <td th:text="${estate.city}"></td>
-                                    <td th:text="${estate.address}"></td>
-                                    <td th:text="${estate.size}"></td>
-                                    <td th:text="${estate.price}"></td>
-                                    <td th:text="${estate.yearOfManufacture}"></td>
-                                    <!-- Status badge -->
-                                    <td>
-                                        <span th:if="${estate.estateStatusForTenant != null and estate.estateStatusForTenant.name() == 'Not_occupied'}" 
-                                              class="badge bg-success">Available</span>
-                                        <span th:if="${estate.estateStatusForTenant != null and estate.estateStatusForTenant.name() == 'Occupied'}" 
-                                              class="badge bg-danger">Occupied</span>
-                                    </td>
-                                    <!-- Action buttons -->
-                                    <td>
-                                        <a th:href="@{/applications/create/{id}(id=${estate.id})}"
-                                           class="btn btn-primary btn-sm">
-                                            Apply
+<div layout:fragment="main-content">
+    <!-- Main content container -->
+    <div class="container pt-4 flex-grow-1">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Search card -->
+                <div class="card form-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-search me-2"></i>Search Available Properties</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Search form -->
+                        <form th:action="@{/tenants/estates/search}" method="get" class="mb-4">
+                            <div class="row g-3">
+                                <!-- Price range inputs -->
+                                <div class="col-md-3">
+                                    <label for="minPrice" class="form-label">Min Price</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-euro-sign"></i></span>
+                                        <input type="number" class="form-control" id="minPrice" name="minPrice"
+                                               th:value="${param.minPrice}" step="0.01">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="maxPrice" class="form-label">Max Price</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-euro-sign"></i></span>
+                                        <input type="number" class="form-control" id="maxPrice" name="maxPrice"
+                                               th:value="${param.maxPrice}" step="0.01">
+                                    </div>
+                                </div>
+                                <!-- Location inputs -->
+                                <div class="col-md-3">
+                                    <label for="city" class="form-label">City</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-city"></i></span>
+                                        <input type="text" class="form-control" id="city" name="city"
+                                               th:value="${param.city}" placeholder="Enter city">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="address" class="form-label">Address</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                        <input type="text" class="form-control" id="address" name="address"
+                                               th:value="${param.address}" placeholder="Enter address">
+                                    </div>
+                                </div>
+                                <!-- Year built input -->
+                                <div class="col-md-3">
+                                    <label for="yearOfManufacture" class="form-label">Year Built</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                        <input type="number" class="form-control" id="yearOfManufacture" name="yearOfManufacture"
+                                               th:value="${param.yearOfManufacture}" min="1800" max="2025">
+                                    </div>
+                                </div>
+                                <!-- Size range inputs -->
+                                <div class="col-md-3">
+                                    <label for="minSize" class="form-label">Min Size (m²)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-ruler-combined"></i></span>
+                                        <input type="number" class="form-control" id="minSize" name="minSize"
+                                               th:value="${param.minSize}" step="0.01" min="0">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="maxSize" class="form-label">Max Size (m²)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-ruler-combined"></i></span>
+                                        <input type="number" class="form-control" id="maxSize" name="maxSize"
+                                               th:value="${param.maxSize}" step="0.01" min="0">
+                                    </div>
+                                </div>
+                                <!-- Occupancy status dropdown -->
+                                <div class="col-md-3">
+                                    <label for="occupancyStatus" class="form-label">Occupancy Status</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-home"></i></span>
+                                        <select class="form-select" id="occupancyStatus" name="occupancyStatus">
+                                            <option value="">All</option>
+                                            <option value="Not_occupied" th:selected="${param.occupancyStatus == 'Not_occupied'}">Available</option>
+                                            <option value="Occupied" th:selected="${param.occupancyStatus == 'Occupied'}">Occupied</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- Form buttons -->
+                                <div class="col-12">
+                                    <div class="d-flex gap-2">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-search me-2"></i>Search
+                                        </button>
+                                        <a th:href="@{/tenants/estates/search}" class="btn btn-secondary">
+                                            <i class="fas fa-undo me-2"></i>Clear Filters
                                         </a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- Search results section -->
+                        <div th:if="${estates != null}">
+                            <h4 class="mt-4 mb-3" th:if="${!#lists.isEmpty(estates)}">
+                                <i class="fas fa-list me-2"></i>Search Results
+                            </h4>
+                            <div th:if="${#lists.isEmpty(estates)}" class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>No properties found matching your criteria.
+                            </div>
+                            <!-- Results table -->
+                            <div th:if="${!#lists.isEmpty(estates)}" class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>City</th>
+                                            <th>Address</th>
+                                            <th>Size (m²)</th>
+                                            <th>Price</th>
+                                            <th>Year Built</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="estate : ${estates}">
+                                            <td th:text="${estate.city}"></td>
+                                            <td th:text="${estate.address}"></td>
+                                            <td th:text="${estate.size}"></td>
+                                            <td th:text="${estate.price}"></td>
+                                            <td th:text="${estate.yearOfManufacture}"></td>
+                                            <td>
+                                                <span th:if="${estate.estateStatusForTenant.name() == 'Not_occupied'}" 
+                                                      class="status-badge not-occupied">Available</span>
+                                                <span th:if="${estate.estateStatusForTenant.name() == 'Occupied'}" 
+                                                      class="status-badge occupied">Occupied</span>
+                                            </td>
+                                            <td>
+                                                <a th:href="@{/applications/create/{id}(id=${estate.id})}" 
+                                                   class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-edit"></i> Apply
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

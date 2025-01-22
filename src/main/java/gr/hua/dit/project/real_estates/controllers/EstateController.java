@@ -124,14 +124,6 @@ public class EstateController {
        return "redirect:/estate";
    }
 
-   // Display pending estates - only accessible by admin
-   @GetMapping("/pending")
-   @Secured("ROLE_ADMIN")
-   public String showPendingEstates(Model model) {
-       model.addAttribute("estates", estateService.getPendingEstates());
-       return "estate/pending-estates";
-   }
-
    // Handle estate approval - only accessible by admin
    @Secured("ROLE_ADMIN")
    @PostMapping("/{id}/approve")

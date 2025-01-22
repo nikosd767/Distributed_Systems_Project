@@ -98,7 +98,8 @@ public class TenantController {
     @GetMapping("/estates/search")
     public String searchEstates(@RequestParam(required = false) Double minPrice,
                               @RequestParam(required = false) Double maxPrice,
-                              @RequestParam(required = false) String location,
+                              @RequestParam(required = false) String city,
+                              @RequestParam(required = false) String address,
                               @RequestParam(required = false) Integer yearOfManufacture,
                               @RequestParam(required = false) Double minSize,
                               @RequestParam(required = false) Double maxSize,
@@ -111,6 +112,15 @@ public class TenantController {
                 statusEnum = EstateStatusForTenant.valueOf(occupancyStatus);
             } catch (IllegalArgumentException e) {
             }
+        }
+        
+        // Combine city and address for location search
+        String location = null;
+        if (city != null && !city.isEmpty()) {
+            location = city;
+        }
+        if (address != null && !address.isEmpty()) {
+            location = location == null ? address : location + " " + address;
         }
         
         List<Estate> estates = tenantService.searchEstates(minPrice, maxPrice, location, 

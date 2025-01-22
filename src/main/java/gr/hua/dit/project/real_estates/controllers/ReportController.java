@@ -55,19 +55,6 @@ public class ReportController {
        }
    }
 
-   // Display single report details
-   @GetMapping("/view/{reportId}")
-   public String viewReport(@PathVariable Integer reportId, Model model) {
-       try {
-           reportService.getReportById(reportId).ifPresent(report ->
-                   model.addAttribute("report", report));
-           return "reports/report-details";
-       } catch (Exception e) {
-           System.err.println("Error in viewReport: " + e.getMessage());
-           return "redirect:/";
-       }
-   }
-
    // Display form for creating new report, showing only estates with approved applications
    @GetMapping("/create")
    public String showReportForm(Model model, Principal principal) {

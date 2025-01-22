@@ -11,6 +11,8 @@
     <title>Real Estate Management</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
     <!-- Base layout styles -->
     <style>
         body {
@@ -34,18 +36,6 @@
     <!-- Main content area -->
     <main>
         <div class="container">
-            <!-- Success message alert -->
-            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
-                <span th:text="${successMessage}"></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-
-            <!-- Error message alert -->
-            <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show">
-                <span th:text="${errorMessage}"></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-
             <!-- Content placeholder -->
             <div layout:fragment="main-content">
                 <p></p>

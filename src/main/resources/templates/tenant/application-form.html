@@ -1,68 +1,93 @@
-<!-- Template for property application form -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="page_layout/header :: head">
-    <title>Apply for Property</title>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+<head>
+    <title>Apply for Property - Real Estate Management</title>
+    <link rel="stylesheet" th:href="@{/css/form-styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="d-flex flex-column min-vh-100">
 <!-- Include header -->
 <div th:replace="page_layout/header :: header"></div>
 
-<!-- Main content container -->
-<div class="container pt-4 flex-grow-1">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <!-- Error message alert -->
-            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
-                <span th:text="${error}"></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-
-            <!-- Application form card -->
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0">Property Application</h3>
+<div layout:fragment="main-content">
+    <!-- Main content container -->
+    <div class="container pt-4 flex-grow-1">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <!-- Error message alert -->
+                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert" 
+                     style="background-color: #FFE6E6; color: #DC3545; border-color: #DC3545; border-radius: 8px;">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    <span th:text="${error}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                <div class="card-body">
-                    <!-- Property details section -->
-                    <div class="mb-4">
-                        <h4>Property Details</h4>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p><strong>Address:</strong> <span th:text="${estate.address}"></span></p>
-                                <p><strong>City:</strong> <span th:text="${estate.city}"></span></p>
-                            </div>
-                            <div class="col-md-6">
-                                <p><strong>Size:</strong> <span th:text="${estate.size}"></span> m²</p>
-                                <p><strong>Price:</strong> <span th:text="${estate.price}"></span></p>
-                            </div>
-                        </div>
+
+                <!-- Application form card -->
+                <div class="card form-card">
+                    <div class="card-header">
+                        <h3 class="mb-0"><i class="fas fa-file-signature me-2"></i>Property Application</h3>
                     </div>
-
-                    <!-- Application form -->
-                    <form th:action="@{/applications/submit}" method="post" th:object="${application}">
-                        <input type="hidden" name="estateId" th:value="${estate.id}" />
-
-                        <!-- Arrival date input -->
-                        <div class="mb-3">
-                            <label for="arrivalDate" class="form-label">Desired Arrival Date</label>
-                            <input type="date" class="form-control" id="arrivalDate" required
-                                   th:field="*{arrivalDate}" min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" />
+                    <div class="card-body">
+                        <!-- Property details section -->
+                        <div class="mb-4">
+                            <h4 class="mb-3" style="color: #3D3D3D;"><i class="fas fa-home me-2"></i>Property Details</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><i class="fas fa-map-marker-alt me-2"></i><strong>Address:</strong> <span th:text="${estate.address}"></span></p>
+                                    <p><i class="fas fa-city me-2"></i><strong>City:</strong> <span th:text="${estate.city}"></span></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><i class="fas fa-ruler-combined me-2"></i><strong>Size:</strong> <span th:text="${estate.size}"></span> m²</p>
+                                    <p><i class="fas fa-euro-sign me-2"></i><strong>Price:</strong> <span th:text="${estate.price}"></span></p>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- Departure date input -->
-                        <div class="mb-3">
-                            <label for="departureDate" class="form-label">Desired Departure Date</label>
-                            <input type="date" class="form-control" id="departureDate" required
-                                   th:field="*{departureDate}" min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" />
-                        </div>
+                        <!-- Application form -->
+                        <form th:action="@{/applications/submit}" method="post" th:object="${application}">
+                            <input type="hidden" name="estateId" th:value="${estate.id}" />
 
-                        <!-- Form buttons -->
-                        <div class="text-end">
-                            <a th:href="@{/tenants/estates/search}" class="btn btn-secondary me-2">Cancel</a>
-                            <button type="submit" class="btn btn-primary">Submit Application</button>
-                        </div>
-                    </form>
+                            <!-- Arrival date input -->
+                            <div class="mb-3">
+                                <label for="arrivalDate" class="form-label">Desired Arrival Date</label>
+                                <div class="input-group">
+                                    <span class="input-group-text" style="background-color: #578E7E; color: #F4ECD5; border: none;">
+                                        <i class="fas fa-calendar-alt"></i>
+                                    </span>
+                                    <input type="date" class="form-control" id="arrivalDate" required
+                                           th:field="*{arrivalDate}" min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"
+                                           style="border-color: #578E7E;" />
+                                </div>
+                            </div>
+
+                            <!-- Departure date input -->
+                            <div class="mb-3">
+                                <label for="departureDate" class="form-label">Desired Departure Date</label>
+                                <div class="input-group">
+                                    <span class="input-group-text" style="background-color: #578E7E; color: #F4ECD5; border: none;">
+                                        <i class="fas fa-calendar-alt"></i>
+                                    </span>
+                                    <input type="date" class="form-control" id="departureDate" required
+                                           th:field="*{departureDate}" min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}"
+                                           style="border-color: #578E7E;" />
+                                </div>
+                            </div>
+
+                            <!-- Form buttons -->
+                            <div class="text-end mt-4">
+                                <a th:href="@{/tenants/estates/search}" class="btn me-2" 
+                                   style="background-color: #3D3D3D; color: #F4ECD5;">
+                                    <i class="fas fa-times me-1"></i>Cancel
+                                </a>
+                                <button type="submit" class="btn" 
+                                        style="background-color: #578E7E; color: #F4ECD5;">
+                                    <i class="fas fa-paper-plane me-1"></i>Submit Application
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -70,14 +95,14 @@
 </div>
 
 <!-- Include footer -->
-<footer th:replace="page_layout/footer :: footer" class="mt-auto"></footer>
+<footer th:replace="page_layout/footer :: footer" class="mt-auto" style="background-color: #3D3D3D; color: #F4ECD5;"></footer>
 
 <!-- Bootstrap and Popper JS -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
 
 <!-- Date validation script -->
-<script>
+<script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', function() {
         const arrivalDateInput = document.getElementById('arrivalDate');
         const departureDateInput = document.getElementById('departureDate');

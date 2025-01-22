@@ -1,80 +1,78 @@
-<!-- Template for displaying user's reports -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{page_layout/layout}">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Reports</title>
-    <!-- Custom styles for layout -->
-    <style>
-        html, body {
-            height: 100%;
-        }
-        body {
-            display: flex;
-            flex-direction: column;
-        }
-        .content-wrapper {
-            flex: 1 0 auto;
-        }
-        footer {
-            flex-shrink: 0;
-            padding: 20px 0;
-            background-color: #f8f9fa;
-            margin-top: auto;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/table-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <!-- Main content section -->
-    <div layout:fragment="main-content" class="content-wrapper">
-        <div class="container mt-4">
-            <h2>My Reports</h2>
-            
-            <!-- Error message display -->
-            <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
-            
-            <!-- No reports message -->
-            <div th:if="${#lists.isEmpty(reports)}" class="alert alert-info">
-                You don't have any reports yet.
+<div layout:fragment="main-content">
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h3 class="mb-0">My Reports</h3>
             </div>
-            
-            <!-- Reports table -->
-            <div th:if="${not #lists.isEmpty(reports)}" class="table-responsive">
-                <table class="table table-striped">
-                    <!-- Table headers -->
-                    <thead>
-                        <tr>
-                            <th>Report ID</th>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Estate</th>
-                            <th>Status</th>
-                            <th>Report Date</th>
-                        </tr>
-                    </thead>
-                    <!-- Table body -->
-                    <tbody>
-                        <tr th:each="report : ${reports}">
-                            <td th:text="${report.reportId}"></td>
-                            <td th:text="${report.title}"></td>
-                            <td th:text="${report.description}"></td>
-                            <td th:text="${report.application != null ? report.application.estate.title : 'N/A'}"></td>
-                            <!-- Report status badge -->
-                            <td>
-                                <span th:if="${report.status != null}"
-                                      th:text="${report.status}"
-                                      th:class="${report.status.name() == 'Pending' ? 'badge bg-warning' : 
-                                               (report.status.name() == 'Approved' ? 'badge bg-success' : '')}">
-                                </span>
-                                <span th:if="${report.status == null}" class="badge bg-secondary">Unknown</span>
-                            </td>
-                            <td th:text="${report.reportDate != null ? #dates.format(report.reportDate, 'dd-MM-yyyy HH:mm') : ''}"></td>
-                        </tr>
-                    </tbody>
-                </table>
+        </div>
+        
+        <!-- Error message display -->
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle"></i>
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        
+        <!-- Reports list -->
+        <div class="row">
+            <div class="col-12">
+                <!-- No reports message -->
+                <div th:if="${#lists.isEmpty(reports)}" class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    You don't have any reports yet.
+                </div>
+                
+                <!-- Reports table -->
+                <div th:if="${not #lists.isEmpty(reports)}">
+                    <div class="table-card">
+                        <div class="card-body">
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>REPORT ID</th>
+                                        <th>TITLE</th>
+                                        <th>DESCRIPTION</th>
+                                        <th>ESTATE</th>
+                                        <th>STATUS</th>
+                                        <th>REPORT DATE</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="report : ${reports}">
+                                        <td th:text="${report.reportId}"></td>
+                                        <td th:text="${report.title}"></td>
+                                        <td th:text="${report.description}"></td>
+                                        <td th:text="${report.application != null ? report.application.estate.title : 'N/A'}"></td>
+                                        <td>
+                                            <span th:if="${report.status != null}"
+                                                  th:text="${report.status}"
+                                                  th:class="${report.status.name() == 'Pending' ? 'status-badge pending' : 
+                                                           (report.status.name() == 'Approved' ? 'status-badge approved' : '')}">
+                                            </span>
+                                            <span th:if="${report.status == null}" class="status-badge unknown">Unknown</span>
+                                        </td>
+                                        <td th:text="${report.reportDate != null ? #dates.format(report.reportDate, 'dd-MM-yyyy HH:mm') : ''}"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+</div>
 </body>
 </html>

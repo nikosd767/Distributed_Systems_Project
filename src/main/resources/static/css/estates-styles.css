@@ -1,0 +1,81 @@
+/* Filter section styles */
+.filter-section {
+    margin: 20px 0;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-btn {
+    padding: 8px 16px;
+    border-radius: 50px;
+    text-decoration: none;
+    color: #3D3D3D;
+    background-color: #F4ECD5;
+    border: 2px solid #3D3D3D;
+    transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+    background-color: #3D3D3D;
+    color: #F4ECD5;
+    text-decoration: none;
+}
+
+.filter-btn.active {
+    background-color: #3D3D3D;
+    color: #F4ECD5;
+}
+
+/* Status badge styles */
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: inline-block;
+    text-align: center;
+    min-width: 100px;
+}
+
+.status-badge.occupied {
+    background-color: #e74c3c;
+    color: #F4ECD5;
+}
+
+.status-badge.not-occupied {
+    background-color: #3D3D3D;
+    color: #F4ECD5;
+}
+
+.status-badge.approved {
+    background-color: #578E7E;
+    color: #F4ECD5;
+}
+
+.status-badge.pending {
+    background-color: #3D3D3D;
+    color: #F4ECD5;
+}
+
+/* Add New Estate button */
+.add-estate-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    border-radius: 50px;
+    background-color: #578E7E;
+    color: #F4ECD5;
+    border: none;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.add-estate-btn:hover {
+    background-color: #3D3D3D;
+    color: #F4ECD5;
+    text-decoration: none;
+}

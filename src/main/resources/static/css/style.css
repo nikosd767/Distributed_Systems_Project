@@ -1,0 +1,230 @@
+/* Add keyframe animations */
+@keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+body {
+    background-color: #F4ECD5; /* Background */
+    color: #3D3D3D; /* Text color */
+    font-family: 'Arial', sans-serif;
+}
+
+/* Navbar Styles */
+.navbar {
+    transition: all 0.3s ease;
+    padding: 1rem 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    color: #FFFAEC !important;
+    font-weight: 600;
+    font-size: 1.4rem;
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover {
+    transform: translateY(-2px);
+}
+
+.nav-link {
+    color: #FFFAEC !important;
+    position: relative;
+    padding: 0.5rem 1rem !important;
+    margin: 0 0.2rem;
+    transition: all 0.3s ease;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background-color: #FFFAEC;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.nav-link:hover {
+    transform: translateY(-2px);
+}
+
+.nav-link.active {
+    background-color: rgba(61, 61, 61, 0.2) !important;
+    border-radius: 4px;
+    color: #FFFAEC !important;
+}
+
+.nav-link.active::after {
+    width: 100%;
+}
+
+.navbar-toggler {
+    border: none;
+    padding: 0.5rem;
+    transition: transform 0.3s ease;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.navbar-toggler:hover {
+    transform: rotate(90deg);
+}
+
+.navbar-collapse {
+    animation: fadeInDown 0.4s ease forwards;
+}
+
+footer {
+    background-color: #3D3D3D; /* Footer */
+    color: #FFFAEC; /* Text in Footer */
+}
+
+.alert-success {
+    background-color: #578E7E; /* Header Color */
+    color: #FFFAEC; /* Light Text */
+}
+
+.alert-danger {
+    background-color: #3D3D3D; /* Footer Color */
+    color: #FFFAEC;
+}
+
+.btn-outline-light {
+    color: #FFFAEC;
+    border-color: #FFFAEC;
+}
+
+.btn-outline-light:hover {
+    background-color: #FFFAEC;
+    color: #3D3D3D;
+}
+
+/* Updated hero styles with animations */
+.hero-container {
+    position: relative;
+    width: 124%;
+    height: calc(100vh - 187px);
+    overflow: hidden;
+}
+
+.hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0;
+    animation: fadeInUp 1s ease-out forwards;
+}
+
+.hero-content {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    max-width: 500px;
+    padding: 2rem;
+    background-color: #F4ECD5;
+    border-radius: 8px;
+    z-index: 1;
+    opacity: 0;
+    animation: fadeInDown 1s ease-out forwards;
+    animation-delay: 0.5s; /* Slight delay for text animation */
+}
+
+.hero-content h1 {
+    color: #3D3D3D;
+    margin-bottom: 1rem;
+}
+
+.hero-content .lead {
+    color: #3D3D3D;
+    font-size: 1.2rem;
+}
+
+/* Footer styles */
+.footer {
+    background-color: #3D3D3D;
+    color: #F4ECD5;
+    padding: 1.5rem 0;
+    margin-top: 3rem;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.footer-section {
+    padding: 0.5rem;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.user-details, .user-roles {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #F4ECD5;
+}
+
+.user-details i, .user-roles i {
+    color: #578E7E;
+}
+
+.copyright {
+    font-size: 0.9rem;
+    color: #F4ECD5;
+    opacity: 0.8;
+}
+
+/* Make footer responsive */
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-section {
+        width: 100%;
+    }
+
+    .user-info {
+        align-items: center;
+    }
+}

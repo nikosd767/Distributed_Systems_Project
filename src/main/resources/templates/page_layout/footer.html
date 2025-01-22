@@ -1,16 +1,18 @@
 <!-- Footer -->
-<footer th:fragment="footer" class="container-fluid bg-light py-3 mt-4" xmlns:sec="http://www.w3.org/1999/xhtml">
+<footer th:fragment="footer" class="footer" xmlns:sec="http://www.w3.org/1999/xhtml">
     <div class="container">
-        <div class="row">
-            <div class="col-md-6">
+        <div class="footer-content">
+            <div class="footer-section">
                 <!-- User authentication information -->
-                <div sec:authorize="isAuthenticated()" class="mb-2">
-                    <small class="text-muted">
-                        <!-- Display logged-in user's name and roles -->
-                        Logged in as: <span sec:authentication="name"></span>
-                        <br>
-                        Roles: <span sec:authentication="principal.authorities"></span>
-                    </small>
+                <div sec:authorize="isAuthenticated()" class="user-info">
+                    <div class="user-details">
+                        <i class="fas fa-user me-2"></i>
+                        <span sec:authentication="name"></span>
+                    </div>
+                    <div class="user-roles">
+                        <i class="fas fa-shield-alt me-2"></i>
+                        <span sec:authentication="principal.authorities"></span>
+                    </div>
                 </div>
             </div>
         </div>

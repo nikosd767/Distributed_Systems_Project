@@ -1,19 +1,32 @@
-<!-- Template for displaying and managing pending user registrations -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="page_layout/header :: head">
-    <title>Pending Users</title>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Pending Users - Real Estate Management</title>
+    <link rel="stylesheet" th:href="@{/css/table-styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<!-- Body with flex layout for sticky footer -->
-<body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;">
-    <!-- Include header -->
-    <div th:replace="page_layout/header :: header"></div>
+<body>
+<div layout:fragment="main-content">
+    <div class="container mt-4">
+        <div class="page-header">
+            <h2><i class="fas fa-users me-2"></i>Pending Users</h2>
+        </div>
 
-    <!-- Main content container -->
-    <div class="container" style="flex: 1; padding-top: 70px;">
-        <h2>Pending Users</h2>
-        <!-- Pending users table -->
-        <div class="table-responsive mt-3">
+        <!-- Success message display -->
+        <div th:if="${successMessage}" class="alert alert-success" role="alert">
+            <span th:text="${successMessage}"></span>
+        </div>
+
+        <!-- Empty state message -->
+        <div th:if="${#lists.isEmpty(users)}" class="alert alert-info">
+            There are no pending users.
+        </div>
+
+        <!-- Users table -->
+        <div th:if="${not #lists.isEmpty(users)}" class="table-responsive">
             <table class="table">
                 <!-- Table headers -->
                 <thead>
@@ -25,34 +38,37 @@
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <!-- Table body with user rows -->
+                <!-- Table body -->
                 <tbody>
-                    <tr th:each="user : ${users}" class="table-light">
+                    <tr th:each="user : ${users}">
                         <td th:text="${user.userId}"></td>
                         <td th:text="${user.username}"></td>
                         <td th:text="${user.email}"></td>
-                        <td th:text="${user.status}"></td>
-                        <!-- Action buttons for approving or deleting users -->
                         <td>
-                            <!-- Approve user form -->
-                            <form th:action="@{/users/{id}/approve(id=${user.userId})}" method="post" style="display: inline;">
-                                <button type="submit" class="btn btn-success btn-sm">Approve</button>
-                            </form>
-                            <!-- Delete user form -->
-                            <form th:action="@{/pending-users/{id}/delete(id=${user.userId})}" method="post" style="display: inline;">
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                            </form>
+                            <span th:if="${user.status == null || user.status.name() == 'Pending'}" class="status-badge pending">Pending</span>
+                            <span th:if="${user.status != null && user.status.name() == 'Approved'}" class="status-badge approved">Approved</span>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <!-- Approve user form -->
+                                <form th:if="${user.status == null || user.status.name() == 'Pending'}"
+                                      th:action="@{/users/{id}/approve(id=${user.userId})}" 
+                                      method="post">
+                                    <button type="submit" class="btn btn-sm btn-approve">Approve</button>
+                                </form>
+                                <!-- Delete user form -->
+                                <form th:action="@{/pending-users/{id}/delete(id=${user.userId})}" 
+                                      method="post"
+                                      onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                    <button type="submit" class="btn btn-sm btn-delete">Delete</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
-
-    <!-- Include footer -->
-    <div th:replace="page_layout/footer :: footer"></div>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</div>
 </body>
 </html>
