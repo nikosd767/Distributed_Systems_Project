@@ -36,8 +36,8 @@ mvn spring-boot:run
 Connect to database using
 
 ```
-#PGPASSWORD=r3Jw5SnpaLABKvAPutqsn8Ilo2zGaLeQ psql -h dpg-ctuh0prqf0us73f46hkg-a.oregon-postgres.render.com -U reuser redb_6346
+#PGPASSWORD=5quCTZRJEPaLJlegSBBuaaPRkkdPjf6w psql -h dpg-cu8hvkq3esus73b02u4g-a.oregon-postgres.render.com -U reuser redb_jji4
 spring.datasource.username=reuser
-spring.datasource.password=r3Jw5SnpaLABKvAPutqsn8Ilo2zGaLeQ
-spring.datasource.url=jdbc:postgresql://dpg-ctuh0prqf0us73f46hkg-a.oregon-postgres.render.com:5432/redb_6346
+spring.datasource.password=5quCTZRJEPaLJlegSBBuaaPRkkdPjf6w
+spring.datasource.url=jdbc:postgresql://dpg-cu8hvkq3esus73b02u4g-a.oregon-postgres.render.com:5432/redb_jji4
 ```
