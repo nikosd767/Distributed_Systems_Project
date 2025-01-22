@@ -67,12 +67,12 @@
                             <div class="btn-group">
                                 <!-- Approve report form -->
                                 <form th:if="${report.status == null || report.status.name() == 'Pending'}"
-                                      th:action="@{/reports/{id}/approve(id=${report.reportId})}" 
+                                      th:action="@{/reports/approve/{id}(id=${report.reportId})}" 
                                       method="post">
                                     <button type="submit" class="btn btn-sm btn-approve">Approve</button>
                                 </form>
                                 <!-- Delete report form -->
-                                <form th:action="@{/reports/{id}/delete(id=${report.reportId})}" 
+                                <form th:action="@{/reports/delete/{reportId}(reportId=${report.reportId})}" 
                                       method="post"
                                       onsubmit="return confirm('Are you sure you want to delete this report?');">
                                     <button type="submit" class="btn btn-sm btn-delete">Delete</button>
