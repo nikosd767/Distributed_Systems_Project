@@ -25,9 +25,9 @@
         <div class="filter-section">
             <span><i class="fas fa-filter me-2"></i>Filter by Status:</span>
             <div class="mt-2">
-                <a href="/reports" class="btn-filter" th:classappend="${filter == null} ? 'active' : ''">All</a>
-                <a href="/reports?filter=Pending" class="btn-filter" th:classappend="${filter == 'Pending'} ? 'active' : ''">Pending</a>
-                <a href="/reports?filter=Approved" class="btn-filter" th:classappend="${filter == 'Approved'} ? 'active' : ''">Approved</a>
+                <a href="/reports/list" class="btn-filter" th:classappend="${filter == null} ? 'active' : ''">All</a>
+                <a href="/reports/list?filter=Pending" class="btn-filter" th:classappend="${filter == 'Pending'} ? 'active' : ''">Pending</a>
+                <a href="/reports/list?filter=Approved" class="btn-filter" th:classappend="${filter == 'Approved'} ? 'active' : ''">Approved</a>
             </div>
         </div>
 

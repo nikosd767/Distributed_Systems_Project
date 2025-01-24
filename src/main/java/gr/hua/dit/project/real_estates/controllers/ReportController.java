@@ -26,34 +26,39 @@ public class ReportController {
        this.applicationService = applicationService;
    }
 
-   // Display all reports with debug logging
-   @GetMapping("/list")
-   public String viewAllReports(Model model, Principal principal) {
-       try {
-           if (principal == null) {
-               return "redirect:/login";
-           }
+    @GetMapping("/list")
+    public String viewAllReports(@RequestParam(value = "filter", required = false) String filter, Model model, Principal principal) {
+        try {
+            if (principal == null) {
+                return "redirect:/login";
+            }
 
-           List<Report> reports = reportService.getAllReports();
-           // Debug logging for report details
-           System.out.println("Debug - Number of reports found: " + reports.size());
-           for (Report report : reports) {
-               System.out.println("Debug - Report ID: " + report.getReportId());
-               System.out.println("Debug - Report Title: " + report.getTitle());
-               System.out.println("Debug - Report Application: " + (report.getApplication() != null ? "exists" : "null"));
-               if (report.getApplication() != null) {
-                   System.out.println("Debug - Application Estate: " + (report.getApplication().getEstate() != null ? "exists" : "null"));
-               }
-           }
-           model.addAttribute("reports", reports);
-           return "reports/reports";
-       } catch (Exception e) {
-           System.err.println("Error in viewAllReports: " + e.getMessage());
-           e.printStackTrace();
-           model.addAttribute("error", "An error occurred while fetching reports");
-           return "reports/reports";
-       }
-   }
+            List<Report> reports;
+
+            // Check if a filter is applied
+            if (filter == null || filter.isEmpty()) {
+                reports = reportService.getAllReports(); // No filter, fetch all reports
+            } else {
+                // Convert filter string to enum and fetch filtered reports
+                try {
+                    OtherStatus reportStatus = OtherStatus.valueOf(filter);
+                    reports = reportService.getReportsByStatus(reportStatus);
+                    model.addAttribute("filter", filter); // Pass the filter for the view
+                } catch (IllegalArgumentException e) {
+                    System.err.println("Invalid filter value: " + filter);
+                    model.addAttribute("error", "Invalid filter value");
+                    reports = reportService.getAllReports(); // Default to all reports
+                }
+            }
+
+            model.addAttribute("reports", reports);
+            return "reports/reports";
+        } catch (Exception e) {
+            System.err.println("Error in viewAllReports: " + e.getMessage());
+            model.addAttribute("error", "An error occurred while fetching reports");
+            return "reports/reports";
+        }
+    }
 
    // Display form for creating new report, showing only estates with approved applications
    @GetMapping("/create")
