@@ -33,11 +33,18 @@ Run using
 mvn spring-boot:run
 ```
 
+To login as ADMIN use
+
+```
+username: admin 
+password: admin
+```
+
 Connect to database using
 
 ```
-#PGPASSWORD=r3Jw5SnpaLABKvAPutqsn8Ilo2zGaLeQ psql -h dpg-ctuh0prqf0us73f46hkg-a.oregon-postgres.render.com -U reuser redb_6346
+#PGPASSWORD=hWVX3BFNVcKkcOZNDGSvmBM2L3HpjmBO psql -h dpg-cup0iclumphs73e2ihr0-a.oregon-postgres.render.com -U reuser redb_97nd
 spring.datasource.username=reuser
-spring.datasource.password=r3Jw5SnpaLABKvAPutqsn8Ilo2zGaLeQ
-spring.datasource.url=jdbc:postgresql://dpg-ctuh0prqf0us73f46hkg-a.oregon-postgres.render.com:5432/redb_6346
+spring.datasource.password=hWVX3BFNVcKkcOZNDGSvmBM2L3HpjmBO
+spring.datasource.url=jdbc:postgresql://dpg-cup0iclumphs73e2ihr0-a.oregon-postgres.render.com:5432/redb_97nd
 ```
