@@ -33,7 +33,7 @@ Run using
 mvn spring-boot:run
 ```
 
-To login as ADMIN use
+Login as ADMIN using
 
 ```
 username: admin 
